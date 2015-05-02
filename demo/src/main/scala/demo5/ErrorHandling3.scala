@@ -19,7 +19,7 @@ object ErrorHandling3 extends App {
   }
 
   implicit val mat = ActorFlowMaterializer()
-  val source = Source(0 to 5).section(OperationAttributes.supervisionStrategy(decider)) { _.map(100 / _) }
+  val source = Source(0 to 5).withAttributes(ActorOperationAttributes.supervisionStrategy(decider)).map { 100 / _ }
   val result = source.runWith(Sink.fold(0)(_ + _))
 
   val res = Await.result(result, Duration.Inf)

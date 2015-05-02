@@ -5,7 +5,7 @@ version := "0.1"
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.6",
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-stream-experimental" % "1.0-M5"
+    "com.typesafe.akka" %% "akka-stream-experimental" % "1.0-RC2"
   )
 )
 
