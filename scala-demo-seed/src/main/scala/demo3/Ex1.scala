@@ -14,4 +14,16 @@ object Ex1 extends App {
 
   // Create a stream composing two sources
 
+  val runnable = FlowGraph.closed() { implicit b =>
+    val s1 = Source(1 to 3)
+    val s2 = Source('a' to 'c')
+
+    val zip = b.add(Zip[Int,Char]())
+
+    s1 ~> zip.in0
+    s2 ~> zip.in1
+    zip.out ~> Sink.foreach(println)
+  }
+
+  runnable.run()
 }

@@ -1,4 +1,4 @@
-package demo1
+package demo4
 
 import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
@@ -10,11 +10,14 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
 
-object Ex2 extends App {
-  implicit val system = ActorSystem("demo1")
+object Ex1 extends App {
+  implicit val system = ActorSystem("demo4")
   implicit val materializer = ActorFlowMaterializer()
   import system.dispatcher
 
-  // Create a stream with a mapping stage (using a Flow)
+  // Create a slow stream and show CPUs usage
 
+  val source = Source( () => Iterator.from(1))
+  val flow = Flow[Int].map {x => Thread.sleep(1000); x}
+  source.via(flow).runForeach(println)
 }

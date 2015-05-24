@@ -23,4 +23,18 @@ object GraphEx extends App {
   // in -> f1 -> bcast /     \ merge -> f3 -> out
   //                   \  f4 /
 
+  val runnable = FlowGraph.closed() { implicit b =>
+    val in = Source(1 to 10)
+    val f1, f3 = Flow[Int].map(identity)
+    val bcast = b.add(Broadcast[Int](2))
+    val f2 = Flow[Int].map( _ + 1)
+    val f4 = Flow[Int].map( _ + 100)
+    val merge = b.add(Merge[Int](2))
+    val out = Sink.foreach(println)
+
+    in ~> f1 ~> bcast ~> f2 ~> merge ~> f3 ~> out
+                bcast ~> f4 ~> merge
+  }
+
+  runnable.run()
 }
