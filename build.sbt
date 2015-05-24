@@ -1,4 +1,4 @@
-import com.typesafe.sbteclipse.core._
+// import com.typesafe.sbteclipse.core._
 
 name := """akka-streams-demo"""
 
