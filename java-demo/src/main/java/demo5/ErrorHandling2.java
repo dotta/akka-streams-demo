@@ -17,7 +17,14 @@ import akka.stream.javadsl.Source;
 public class ErrorHandling2 {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo5");
-    Decider decider = new Decider();
+
+    Function<Throwable, Supervision.Directive> decider = e -> {
+      if (e instanceof ArithmeticException)
+        return Supervision.resume();
+      else
+        return Supervision.stop();
+    };
+
     ActorFlowMaterializerSettings settings = ActorFlowMaterializerSettings.create(system).withSupervisionStrategy(
         decider);
     // materializer with a custom supervision strategy
@@ -29,14 +36,5 @@ public class ErrorHandling2 {
     Integer res = Await.result(result, Duration.Inf());
 
     System.out.println(res); // this will print 228
-  }
-
-  private static class Decider implements Function<Throwable, Supervision.Directive> {
-    public Supervision.Directive apply(Throwable e) {
-      if (e instanceof ArithmeticException)
-        return Supervision.resume();
-      else
-        return Supervision.stop();
-    }
   }
 }

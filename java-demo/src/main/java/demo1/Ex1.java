@@ -1,6 +1,6 @@
 package demo1;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 import scala.concurrent.Future;
 import scala.runtime.BoxedUnit;
@@ -16,8 +16,7 @@ public class Ex1 {
     ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
 
     // Create a source with some integer and print them
-    IntStream stream = IntStream.range(1, 4);
-    Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator());
+    Source<Integer, BoxedUnit> source = Source.from(Arrays.asList(0,1,2,3));
     Sink<Integer, Future<BoxedUnit>> sink = Sink.foreach(x -> System.out.println(x));
     RunnableFlow<BoxedUnit> runnable = source.to(sink);
     runnable.run(materializer);

@@ -19,7 +19,12 @@ public class ErrorHandling3 {
     ActorSystem system = ActorSystem.create("demo5");
     ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
 
-    Decider decider = new Decider();
+    Function<Throwable, Supervision.Directive> decider = e -> {
+      if (e instanceof ArithmeticException)
+        return Supervision.resume();
+      else
+        return Supervision.stop();
+    };
 
     IntStream stream = IntStream.range(0, 6);
     Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator()).map(x -> 100 / x)
@@ -28,14 +33,5 @@ public class ErrorHandling3 {
     Integer res = Await.result(result, Duration.Inf());
 
     System.out.println(res); // this will print 228
-  }
-
-  private static class Decider implements Function<Throwable, Supervision.Directive> {
-    public Supervision.Directive apply(Throwable e) {
-      if (e instanceof ArithmeticException)
-        return Supervision.resume();
-      else
-        return Supervision.stop();
-    }
   }
 }
