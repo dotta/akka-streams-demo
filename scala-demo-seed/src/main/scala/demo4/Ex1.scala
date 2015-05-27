@@ -17,7 +17,4 @@ object Ex1 extends App {
 
   // Create a slow stream and show CPUs usage
 
-  val source = Source( () => Iterator.from(1))
-  val flow = Flow[Int].map {x => Thread.sleep(1000); x}
-  source.via(flow).runForeach(println)
 }

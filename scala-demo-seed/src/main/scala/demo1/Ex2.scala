@@ -16,11 +16,5 @@ object Ex2 extends App {
   import system.dispatcher
 
   // Create a stream with a mapping stage (using a Flow)
-  val source = Source(1 to 10)
-  val flow = Flow[Int].map(_ + 10)
-  val sink = Sink.foreach(println)
 
-  val runnable = source.via(flow).to(sink)
-
-  runnable.run()
 }

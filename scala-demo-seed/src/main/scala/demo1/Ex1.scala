@@ -17,7 +17,4 @@ object Ex1 extends App {
 
   // Create a source with some integer and print them
 
-  val source = Source(List(1,2,3))
-
-  source.runForeach(println)
 }

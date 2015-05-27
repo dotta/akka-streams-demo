@@ -16,4 +16,5 @@ object Ex3 extends App {
   import system.dispatcher
 
   // Create a stream that folds it's elements
+
 }
