@@ -1,4 +1,4 @@
-// import com.typesafe.sbteclipse.core._
+import com.typesafe.sbteclipse.core._
 
 name := """akka-streams-demo"""
 
@@ -19,7 +19,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val javaSettings = Seq(
-  // EclipseKeys.projectFlavor := EclipseProjectFlavor.Java // this requires my own patched sbteclipse (I'm working on a PR...)
+  EclipseKeys.projectFlavor := EclipseProjectFlavor.Java // this requires my own patched sbteclipse (I'm working on a PR...)
 )
 
 lazy val scalaSeed = project

@@ -16,12 +16,4 @@ object Ex1 extends App {
   import system.dispatcher
 
   // Create a source with some integer and print them
-  val source = Source(List(1,2,3))
-  val sink = Sink.foreach(println)
-  val r: RunnableFlow[Future[Unit]] = source.toMat(sink)(Keep.right)
-  val res: Future[Unit] = r.run()
-
-  res.onComplete { x =>
-    system.shutdown()
-  }
 }
