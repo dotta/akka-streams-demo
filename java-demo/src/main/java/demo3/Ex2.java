@@ -1,15 +1,10 @@
 package demo3;
 
-import java.util.Arrays;
-import java.util.List;
-
-import scala.collection.immutable.Seq;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
-import akka.japi.Util;
 import akka.stream.ActorFlowMaterializer;
 import akka.stream.FanInShape2;
 import akka.stream.Graph;
@@ -37,9 +32,9 @@ public class Ex2 {
 
           b.edge(zip1.out(), zip2.in0());
 
-          List<Inlet<Integer>> inlets = Arrays.asList(zip1.in0(), zip1.in1(), zip2.in1());
-          Seq<Inlet<Integer>> seqInlets = Util.immutableSeq(inlets);
-          return UniformFanInShape.apply(zip2.out(), seqInlets);
+          
+          return new UniformFanInShape<Integer, Integer>(zip2.out(), 
+              new Inlet[] {zip1.in0(), zip1.in1(), zip2.in1()});
         });
     Sink<Integer, Future<Integer>> sink = Sink.head();
 

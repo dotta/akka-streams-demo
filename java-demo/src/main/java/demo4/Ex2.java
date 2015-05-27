@@ -2,9 +2,6 @@ package demo4;
 
 import java.util.stream.IntStream;
 
-import scala.concurrent.Await;
-import scala.concurrent.Future;
-import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.stream.ActorFlowMaterializer;
@@ -42,11 +39,8 @@ public class Ex2 {
       }));
       Inlet<Integer> sink = b.sink(Sink.<Integer> ignore());
 
-      b.edge(source, merge.in(0));
-      b.edge(merge.out(), printer.inlet());
-      b.edge(printer.outlet(), bcast.in());
-      b.edge(bcast.out(0), sink);
-      b.edge(bcast.out(1), merge.in(1));
+      b.from(source).via(merge).via(printer).via(bcast).to(sink);
+      b.from(bcast).to(merge);
     });
 
     runnable.run(materializer);

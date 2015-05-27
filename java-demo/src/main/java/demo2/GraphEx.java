@@ -40,14 +40,8 @@ public class GraphEx {
       UniformFanOutShape<Integer, Integer> bcast = builder.graph(Broadcast.create(2));
       UniformFanInShape<Integer, Integer> merge = builder.graph(Merge.create(2));
 
-      builder.edge(in, f1.inlet());
-      builder.edge(f1.outlet(), bcast.in());
-      builder.edge(bcast.out(0), f2.inlet());
-      builder.edge(bcast.out(1), f4.inlet());
-      builder.edge(f2.outlet(), merge.in(0));
-      builder.edge(f4.outlet(), merge.in(1));
-      builder.edge(merge.out(), f3.inlet());
-      builder.edge(f3.outlet(), out.inlet());
+      builder.from(in).via(f1).via(bcast).via(f2).via(merge).via(f3).to(out);
+      builder.from(bcast).via(f4).to(merge);
     });
     Future<BoxedUnit> res = runnable.run(materializer);
     Await.result(res, Duration.Inf());
