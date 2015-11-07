@@ -1,7 +1,7 @@
 package demo2
 
 import akka.actor.ActorSystem
-import akka.stream.ActorFlowMaterializer
+import akka.stream.ActorMaterializer
 import akka.stream._
 import akka.stream.scaladsl._
 
@@ -15,7 +15,7 @@ import FlowGraph.Implicits._
 
 object GraphEx extends App {
   implicit val system = ActorSystem("demo2")
-  implicit val materializer = ActorFlowMaterializer()
+  implicit val materializer = ActorMaterializer()
   import system.dispatcher
 
   // create a stream for the following graph

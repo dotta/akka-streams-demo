@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.japi.Pair;
-import akka.stream.ActorFlowMaterializer;
+import akka.stream.ActorMaterializer;
 import akka.stream.FanInShape2;
 import akka.stream.Outlet;
 import akka.stream.javadsl.Source;
@@ -15,7 +15,7 @@ import akka.stream.javadsl.Zip;
 public class Ex1 {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo3");
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
+    ActorMaterializer materializer = ActorMaterializer.create(system);
 
     Source<Integer, BoxedUnit> numbers = Source.from(() -> IntStream.range(1, 4).iterator());
     Source<Character, BoxedUnit> chars = Source.from(Arrays.asList('a', 'b', 'c'));

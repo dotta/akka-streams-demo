@@ -7,7 +7,7 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
-import akka.stream.ActorFlowMaterializer;
+import akka.stream.ActorMaterializer;
 import akka.stream.FlowShape;
 import akka.stream.Outlet;
 import akka.stream.UniformFanInShape;
@@ -16,21 +16,21 @@ import akka.stream.javadsl.Broadcast;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.FlowGraph;
 import akka.stream.javadsl.Merge;
-import akka.stream.javadsl.RunnableFlow;
+import akka.stream.javadsl.RunnableGraph;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 
 public class GraphEx {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo2");
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
+    ActorMaterializer materializer = ActorMaterializer.create(system);
 
     // create a stream for the following graph
     //                      f2
     // in -> f1 -> bcast /     \ merge -> f3 -> out
     //                   \  f4 /
     Sink<Integer, Future<BoxedUnit>> aSink = Sink.<Integer> foreach(x -> System.out.println(x));
-    RunnableFlow<Future<BoxedUnit>> runnable = FlowGraph.factory().closed(aSink, (builder, out) -> {
+    RunnableGraph<Future<BoxedUnit>> runnable = FlowGraph.factory().closed(aSink, (builder, out) -> {
       IntStream stream = IntStream.range(1, 4);
       Outlet<Integer> in = builder.source(Source.from(() -> stream.iterator()));
       FlowShape<Integer, Integer> f1 = builder.graph(Flow.<Integer> create().map(x -> x + 10));

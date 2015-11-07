@@ -5,14 +5,14 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
-import akka.stream.ActorFlowMaterializer;
+import akka.stream.ActorMaterializer;
 import akka.stream.FanInShape2;
 import akka.stream.Graph;
 import akka.stream.Inlet;
 import akka.stream.Outlet;
 import akka.stream.UniformFanInShape;
 import akka.stream.javadsl.FlowGraph;
-import akka.stream.javadsl.RunnableFlow;
+import akka.stream.javadsl.RunnableGraph;
 import akka.stream.javadsl.Source;
 import akka.stream.javadsl.ZipWith;
 import akka.stream.scaladsl.Sink;
@@ -20,7 +20,7 @@ import akka.stream.scaladsl.Sink;
 public class Ex2 {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo3");
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
+    ActorMaterializer materializer = ActorMaterializer.create(system);
 
     // Create a new fan-in junction that takes 3 Integer inputs and outputs the max
     Graph<UniformFanInShape<Integer, Integer>, BoxedUnit> maxOfThree = FlowGraph.factory().partial(
@@ -38,7 +38,7 @@ public class Ex2 {
         });
     Sink<Integer, Future<Integer>> sink = Sink.head();
 
-    RunnableFlow<Future<Integer>> runnable = FlowGraph.factory().closed(sink, (b, out) -> {
+    RunnableGraph<Future<Integer>> runnable = FlowGraph.factory().closed(sink, (b, out) -> {
       Outlet<Integer> s1 = b.source(Source.single(1));
       Outlet<Integer> s2 = b.source(Source.single(2));
       Outlet<Integer> s3 = b.source(Source.single(3));

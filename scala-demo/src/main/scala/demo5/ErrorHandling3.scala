@@ -1,7 +1,7 @@
 package demo5
 
 import akka.actor.ActorSystem
-import akka.stream.ActorFlowMaterializer
+import akka.stream.ActorMaterializer
 import akka.stream._
 import akka.stream.scaladsl._
 import scala.concurrent.duration._
@@ -18,8 +18,8 @@ object ErrorHandling3 extends App {
     case _                      => Supervision.Stop
   }
 
-  implicit val mat = ActorFlowMaterializer()
-  val source = Source(0 to 5).map { 100 / _ }.withAttributes(ActorOperationAttributes.supervisionStrategy(decider))
+  implicit val mat = ActorMaterializer()
+  val source = Source(0 to 5).map { 100 / _ }.withAttributes(ActorAttributes.supervisionStrategy(decider))
   val result = source.runWith(Sink.fold(0)(_ + _))
 
   val res = Await.result(result, Duration.Inf)

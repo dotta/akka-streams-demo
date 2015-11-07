@@ -4,14 +4,14 @@ import java.util.stream.IntStream;
 
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
-import akka.stream.ActorFlowMaterializer;
+import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Source;
 
 public class Ex1 {
 
   public static void main(String[] args) {
     ActorSystem system = ActorSystem.create("demo4");
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
+    ActorMaterializer materializer = ActorMaterializer.create(system);
 
     // Create a slow stream and show CPUs usage
     IntStream numbers = IntStream.iterate(1, x -> x + 1);

@@ -3,7 +3,7 @@
 package extra
 
 import akka.actor.ActorSystem
-import akka.stream.ActorFlowMaterializer
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 
 import scala.collection.immutable
@@ -20,8 +20,8 @@ case class OutputCustomer(firstName: String, lastName: String)
 
 object CustomersExample extends App {
   implicit val actorSystem = ActorSystem("extra")
+  implicit val flowMaterializer = ActorMaterializer()
   import actorSystem.dispatcher
-  implicit val flowMaterializer = ActorFlowMaterializer()
 
   // 1. create the customers to use as input
   // val inputCustomers =

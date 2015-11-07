@@ -11,9 +11,9 @@ initialize := {
 }
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.6",
+  scalaVersion := "2.11.7",
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-stream-experimental" % "1.0-RC3"
+    "com.typesafe.akka" %% "akka-stream-experimental" % "1.0"
   ),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
 )

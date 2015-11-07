@@ -8,8 +8,8 @@ import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.japi.function.Function;
-import akka.stream.ActorFlowMaterializer;
-import akka.stream.ActorOperationAttributes;
+import akka.stream.ActorMaterializer;
+import akka.stream.ActorAttributes;
 import akka.stream.Supervision;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
@@ -17,7 +17,7 @@ import akka.stream.javadsl.Source;
 public class ErrorHandling3 {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo5");
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(system);
+    ActorMaterializer materializer = ActorMaterializer.create(system);
 
     Function<Throwable, Supervision.Directive> decider = e -> {
       if (e instanceof ArithmeticException)
@@ -28,7 +28,7 @@ public class ErrorHandling3 {
 
     IntStream stream = IntStream.range(0, 6);
     Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator()).map(x -> 100 / x)
-        .withAttributes(ActorOperationAttributes.withSupervisionStrategy(decider));
+        .withAttributes(ActorAttributes.withSupervisionStrategy(decider));
     Future<Integer> result = source.runWith(Sink.fold(0, (x, y) -> x + y), materializer);
     Integer res = Await.result(result, Duration.Inf());
 

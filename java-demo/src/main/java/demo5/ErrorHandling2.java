@@ -8,8 +8,8 @@ import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.japi.function.Function;
-import akka.stream.ActorFlowMaterializer;
-import akka.stream.ActorFlowMaterializerSettings;
+import akka.stream.ActorMaterializer;
+import akka.stream.ActorMaterializerSettings;
 import akka.stream.Supervision;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
@@ -25,10 +25,10 @@ public class ErrorHandling2 {
         return Supervision.stop();
     };
 
-    ActorFlowMaterializerSettings settings = ActorFlowMaterializerSettings.create(system).withSupervisionStrategy(
+    ActorMaterializerSettings settings = ActorMaterializerSettings.create(system).withSupervisionStrategy(
         decider);
     // materializer with a custom supervision strategy
-    ActorFlowMaterializer materializer = ActorFlowMaterializer.create(settings, system);
+    ActorMaterializer materializer = ActorMaterializer.create(settings, system);
 
     IntStream stream = IntStream.range(0, 6);
     Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator()).map(x -> 100 / x);

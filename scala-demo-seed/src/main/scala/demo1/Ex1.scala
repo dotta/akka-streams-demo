@@ -1,7 +1,7 @@
 package demo1
 
 import akka.actor.ActorSystem
-import akka.stream.ActorFlowMaterializer
+import akka.stream.ActorMaterializer
 import akka.stream._
 import akka.stream.scaladsl._
 
@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 
 object Ex1 extends App {
   implicit val system = ActorSystem("demo1")
-  implicit val materializer = ActorFlowMaterializer()
+  implicit val materializer = ActorMaterializer()
   import system.dispatcher
 
   // Create a source with some integer and print them
