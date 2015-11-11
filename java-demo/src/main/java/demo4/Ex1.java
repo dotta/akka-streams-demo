@@ -2,10 +2,10 @@ package demo4;
 
 import java.util.stream.IntStream;
 
-import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Source;
+import scala.runtime.BoxedUnit;
 
 public class Ex1 {
 

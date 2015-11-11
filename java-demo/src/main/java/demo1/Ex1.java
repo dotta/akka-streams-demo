@@ -2,13 +2,13 @@ package demo1;
 
 import java.util.Arrays;
 
-import scala.concurrent.Future;
-import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.RunnableGraph;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import scala.concurrent.Future;
+import scala.runtime.BoxedUnit;
 
 public class Ex1 {
   public static void main(String[] args) {

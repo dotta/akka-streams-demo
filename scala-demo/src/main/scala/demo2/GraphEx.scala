@@ -23,7 +23,7 @@ object GraphEx extends App {
   // in -> f1 -> bcast /     \ merge -> f3 -> out
   //                   \  f4 /
   val sink = Sink.foreach(println)
-  val g = FlowGraph.closed(sink) { implicit b =>
+  val g = RunnableGraph.fromGraph(FlowGraph.create(sink) { implicit b =>
     sink =>
       val in = Source(List(1, 2, 3))
       val bcast = b.add(Broadcast[Int](2))
@@ -33,7 +33,8 @@ object GraphEx extends App {
 
       in ~> f1 ~> bcast ~> f2 ~> merge ~> f3 ~> sink
       bcast ~> f4 ~> merge
-  }
+      ClosedShape
+  })
 
   val res = g.run()
   Await.result(res, Duration.Inf)

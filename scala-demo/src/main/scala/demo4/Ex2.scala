@@ -18,13 +18,17 @@ object Ex2 extends App {
   //             ↑                ↓
   //             ←←←←←←←←←
   val source = Source(() => Iterator.from(1))
-  val g = FlowGraph.closed() { implicit b =>
-    val merge = b.add(Merge[Int](2))
-    val bcast = b.add(Broadcast[Int](2))
-    val printer = Flow[Int].map {e => println(e); e}
-    source ~> merge ~> printer ~> bcast ~> Sink.ignore
-    merge      <~   bcast
-  }
+  val g = RunnableGraph.fromGraph(
+    FlowGraph.create() { implicit b =>
+      val merge = b.add(Merge[Int](2))
+      val bcast = b.add(Broadcast[Int](2))
+      val printer = Flow[Int].map {e => println(e); e}
+      source ~> merge ~> printer ~> bcast ~> Sink.ignore
+      merge      <~   bcast
+
+      ClosedShape
+    }
+  )
   g.run()
 
   // Show that it deadlocks

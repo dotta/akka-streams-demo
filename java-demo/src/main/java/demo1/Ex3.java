@@ -2,15 +2,15 @@ package demo1;
 
 import java.util.stream.IntStream;
 
-import scala.concurrent.Await;
-import scala.concurrent.Future;
-import scala.concurrent.duration.Duration;
-import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.japi.function.Function2;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+import scala.runtime.BoxedUnit;
 
 public class Ex3 {
   public static void main(String[] args) throws Exception {

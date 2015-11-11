@@ -16,7 +16,7 @@ object Ex2 extends App {
   import system.dispatcher
 
   // Create a new fan-in junction that takes 3 Int inputs and outputs the max
-  val maxOfThree = FlowGraph.partial() { implicit b =>
+  val maxOfThree = FlowGraph.create() { implicit b =>
     val zip1 = b.add(ZipWith[Int, Int, Int](math.max))
     val zip2 = b.add(ZipWith[Int, Int, Int](math.max))
 
@@ -28,8 +28,8 @@ object Ex2 extends App {
   // and now let's create a stream using this new fan-in shape
 
   val sink = Sink.head[Int]
-  val g = FlowGraph.closed(sink) { implicit b =>
-    out =>
+  val g = RunnableGraph.fromGraph(
+    FlowGraph.create(sink) { implicit b => out =>
       val s1 = Source.single(1)
       val s2 = Source.single(2)
       val s3 = Source.single(3)
@@ -39,7 +39,11 @@ object Ex2 extends App {
       s2 ~> pm3
       s3 ~> pm3
       pm3 ~> out
-  }
+      
+      ClosedShape
+    }
+  )
+
   val max = g.run()
   val res = Await.result(max, Duration.Inf)
   println(res)

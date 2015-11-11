@@ -2,17 +2,17 @@ package demo5;
 
 import java.util.stream.IntStream;
 
+import akka.actor.ActorSystem;
+import akka.japi.function.Function;
+import akka.stream.ActorAttributes;
+import akka.stream.ActorMaterializer;
+import akka.stream.Supervision;
+import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
-import akka.actor.ActorSystem;
-import akka.japi.function.Function;
-import akka.stream.ActorMaterializer;
-import akka.stream.ActorAttributes;
-import akka.stream.Supervision;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
 
 public class ErrorHandling3 {
   public static void main(String[] args) throws Exception {

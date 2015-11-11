@@ -2,12 +2,12 @@ package demo4;
 
 import java.util.stream.IntStream;
 
-import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
+import akka.stream.ClosedShape;
 import akka.stream.FlowShape;
-import akka.stream.Inlet;
 import akka.stream.Outlet;
+import akka.stream.SinkShape;
 import akka.stream.UniformFanInShape;
 import akka.stream.UniformFanOutShape;
 import akka.stream.javadsl.Broadcast;
@@ -17,6 +17,7 @@ import akka.stream.javadsl.Merge;
 import akka.stream.javadsl.RunnableGraph;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import scala.runtime.BoxedUnit;
 
 public class Ex2 {
   public static void main(String[] args) throws Exception {
@@ -28,20 +29,21 @@ public class Ex2 {
     // source → merge → printer → bcast → sink.ignore
     //             ↑                ↓
     //             ←←←←←←←←←
-    RunnableGraph<BoxedUnit> runnable = FlowGraph.factory().closed(b -> {
+    RunnableGraph<BoxedUnit> runnable = RunnableGraph.fromGraph(FlowGraph.create(b -> {
       IntStream numbers = IntStream.iterate(1, x -> x + 1);
-      Outlet<Integer> source = b.source(Source.from(() -> numbers.iterator()));
-      UniformFanInShape<Integer, Integer> merge = b.graph(Merge.create(2));
-      UniformFanOutShape<Integer, Integer> bcast = b.graph(Broadcast.create(2));
-      FlowShape<Integer, Integer> printer = b.graph(Flow.<Integer> create().map(x -> {
+      Outlet<Integer> source = b.add(Source.from(() -> numbers.iterator())).outlet();
+      UniformFanInShape<Integer, Integer> merge = b.add(Merge.create(2));
+      UniformFanOutShape<Integer, Integer> bcast = b.add(Broadcast.create(2));
+      FlowShape<Integer, Integer> printer = b.add(Flow.of(Integer.class).map(x -> {
         System.out.println(x);
         return x;
       }));
-      Inlet<Integer> sink = b.sink(Sink.<Integer> ignore());
+      SinkShape<Integer> sink = b.add(Sink.ignore());
 
-      b.from(source).via(merge).via(printer).via(bcast).to(sink);
-      b.from(bcast).to(merge);
-    });
+      b.from(source).viaFanIn(merge).via(printer).viaFanOut(bcast).to(sink);
+      b.to(merge).fromFanOut(bcast);
+      return ClosedShape.getInstance();
+    }));
 
     runnable.run(materializer);
   }
