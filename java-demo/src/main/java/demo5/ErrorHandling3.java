@@ -12,7 +12,6 @@ import akka.stream.javadsl.Source;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
-import scala.runtime.BoxedUnit;
 
 public class ErrorHandling3 {
   public static void main(String[] args) throws Exception {
@@ -27,7 +26,7 @@ public class ErrorHandling3 {
     };
 
     IntStream stream = IntStream.range(0, 6);
-    Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator()).map(x -> 100 / x)
+    Source<Integer, ?> source = Source.from(() -> stream.iterator()).map(x -> 100 / x)
         .withAttributes(ActorAttributes.withSupervisionStrategy(decider));
     Future<Integer> result = source.runWith(Sink.fold(0, (x, y) -> x + y), materializer);
     Integer res = Await.result(result, Duration.Inf());

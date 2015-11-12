@@ -16,9 +16,9 @@ public class Ex1 {
     ActorMaterializer materializer = ActorMaterializer.create(system);
 
     // Create a source with some integer and print them
-    Source<Integer, BoxedUnit> source = Source.from(Arrays.asList(0,1,2,3));
+    Source<Integer, ?> source = Source.from(Arrays.asList(0,1,2,3));
     Sink<Integer, Future<BoxedUnit>> sink = Sink.foreach(x -> System.out.println(x));
-    RunnableGraph<BoxedUnit> runnable = source.to(sink);
+    RunnableGraph<?> runnable = source.to(sink);
     runnable.run(materializer);
   }
 }

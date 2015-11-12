@@ -18,10 +18,10 @@ public class Ex2 {
 
     // Create a source with some integer and print them
     IntStream stream = IntStream.range(1, 4);
-    Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator());
-    Flow<Integer, Integer, BoxedUnit> f = Flow.<Integer> create().map(x -> x + 10).filter(x -> x % 2 == 0);
+    Source<Integer, ?> source = Source.from(() -> stream.iterator());
+    Flow<Integer, Integer, ?> f = Flow.<Integer> create().map(x -> x + 10).filter(x -> x % 2 == 0);
     Sink<Integer, Future<BoxedUnit>> sink = Sink.foreach(x -> System.out.println(x));
-    RunnableGraph<BoxedUnit> runnable = source.via(f).to(sink);
+    RunnableGraph<?> runnable = source.via(f).to(sink);
     runnable.run(materializer);
   }
 }

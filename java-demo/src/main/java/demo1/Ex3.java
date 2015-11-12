@@ -10,7 +10,6 @@ import akka.stream.javadsl.Source;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
-import scala.runtime.BoxedUnit;
 
 public class Ex3 {
   public static void main(String[] args) throws Exception {
@@ -19,7 +18,7 @@ public class Ex3 {
 
     // Create a source with some integer and print them
     IntStream stream = IntStream.range(1, 11);
-    Source<Integer, BoxedUnit> source = Source.from(() -> stream.iterator());
+    Source<Integer, ?> source = Source.from(() -> stream.iterator());
     Integer zero = 0;
     Function2<Integer, Integer, Integer> f = (x, y) -> x + y;
     Sink<Integer, Future<Integer>> foldingSink = Sink.fold(zero, f);

@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Source;
-import scala.runtime.BoxedUnit;
 
 public class Ex1 {
 
@@ -15,7 +14,7 @@ public class Ex1 {
 
     // Create a slow stream and show CPUs usage
     IntStream numbers = IntStream.iterate(1, x -> x + 1);
-    Source<Integer, BoxedUnit> source = Source.from(() -> numbers.iterator());
+    Source<Integer, ?> source = Source.from(() -> numbers.iterator());
     source.map(e -> { Thread.sleep(1000); return e; }).runForeach(x -> System.out.println(x), materializer);
   }
 

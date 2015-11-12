@@ -16,17 +16,16 @@ import akka.stream.javadsl.ZipWith;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
-import scala.runtime.BoxedUnit;
 
 public class Ex2 {
   public static void main(String[] args) throws Exception {
     ActorSystem system = ActorSystem.create("demo3");
     ActorMaterializer materializer = ActorMaterializer.create(system);
 
-    Graph<FanInShape2<Integer, Integer, Integer>, BoxedUnit> zip =
+    Graph<FanInShape2<Integer, Integer, Integer>, ?> zip =
     		  ZipWith.create((Integer left, Integer right) -> Math.max(left, right));
     // Create a new fan-in junction that takes 3 Integer inputs and outputs the max
-    Graph<UniformFanInShape<Integer, Integer>, BoxedUnit> maxOfThree = 
+    Graph<UniformFanInShape<Integer, Integer>, ?> maxOfThree = 
       FlowGraph.create( b -> {
         FanInShape2<Integer, Integer, Integer> zip1 = b.add(zip);
         FanInShape2<Integer, Integer, Integer> zip2 = b.add(zip);

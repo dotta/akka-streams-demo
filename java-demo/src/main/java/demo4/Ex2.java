@@ -17,7 +17,6 @@ import akka.stream.javadsl.Merge;
 import akka.stream.javadsl.RunnableGraph;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
-import scala.runtime.BoxedUnit;
 
 public class Ex2 {
   public static void main(String[] args) throws Exception {
@@ -29,7 +28,7 @@ public class Ex2 {
     // source → merge → printer → bcast → sink.ignore
     //             ↑                ↓
     //             ←←←←←←←←←
-    RunnableGraph<BoxedUnit> runnable = RunnableGraph.fromGraph(FlowGraph.create(b -> {
+    RunnableGraph<?> runnable = RunnableGraph.fromGraph(FlowGraph.create(b -> {
       IntStream numbers = IntStream.iterate(1, x -> x + 1);
       Outlet<Integer> source = b.add(Source.from(() -> numbers.iterator())).outlet();
       UniformFanInShape<Integer, Integer> merge = b.add(Merge.create(2));
